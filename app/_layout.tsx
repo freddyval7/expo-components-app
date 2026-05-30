@@ -1,22 +1,16 @@
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import "react-native-reanimated";
 
 import { allRoutes } from "@/constants/Routes";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { ThemeChangerProvider } from "@/presentation/context/ThemeChangerContext";
 import { Stack } from "expo-router";
 import "../global.css";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const backgroundColor = useThemeColor({}, "background");
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeChangerProvider>
       <Stack
         screenOptions={{
           headerShadowVisible: false,
@@ -40,10 +34,11 @@ export default function RootLayout() {
             name={route.name}
             options={{
               title: route.title,
+              headerShown: !route.title.includes("Slides"),
             }}
           />
         ))}
       </Stack>
-    </ThemeProvider>
+    </ThemeChangerProvider>
   );
 }
